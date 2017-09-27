@@ -1,0 +1,6 @@
+site_name: ZF Donate
+theme: readthedocs
+docs_dir: code
+site_dir: ../docs
+pages:
+- Home: index.md
