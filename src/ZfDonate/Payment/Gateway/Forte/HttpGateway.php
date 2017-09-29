@@ -3,6 +3,7 @@
 namespace ZfDonate\Payment\Gateway\Forte;
 
 use Omnipay\Common\AbstractGateway;
+use Omnipay\Common\Message\RequestInterface;
 use ZfDonate\Payment\Gateway\OptionsAwareInterface;
 
 /**
@@ -33,7 +34,7 @@ class HttpGateway extends AbstractGateway implements OptionsAwareInterface {
 		return $this->getParameter('paymentGatewayPassword');
 	}
 
-	public function purchase(array $parameters = array()) {
+	public function purchase(array $parameters = array()) : RequestInterface {
 		return $this->createRequest(\ZfDonate\Payment\Gateway\Forte\Message\PurchaseRequest::class,$parameters);
 	}
 

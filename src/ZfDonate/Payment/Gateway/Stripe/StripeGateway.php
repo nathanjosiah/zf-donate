@@ -8,8 +8,8 @@ use ZfDonate\Payment\Gateway\OptionsAwareInterface;
 class StripeGateway extends Gateway implements OptionsAwareInterface {
 	private $planName;
 	public function purchaseMonthly(array $parameters) {
-		if($this->planName) {
-			$parameters['plan_name'] = $this->planName;
+		if($this->getParameter('plan_name')) {
+			$parameters['plan_name'] = $this->getParameter('plan_name');
 		}
 		return $this->createRequest(\ZfDonate\Payment\Gateway\Stripe\Message\PurchaseMonthlyRequest::class,$parameters);
 	}
@@ -19,7 +19,7 @@ class StripeGateway extends Gateway implements OptionsAwareInterface {
 			$this->setApiKey($options['api_key']);
 		}
 		if(isset($options['monthly_plan_name'])) {
-			$this->planName = $options['monthly_plan_name'];
+			$this->setParameter('plan_name',$options['monthly_plan_name']);
 		}
 	}
 }

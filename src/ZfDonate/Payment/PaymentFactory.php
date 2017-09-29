@@ -5,7 +5,6 @@ namespace ZfDonate\Payment;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfDonate\Payment\Gateway\OptionsAwareInterface;
 use ZfDonate\Payment\Adapter\Exception\BadAdapterException;
-use ZfDonate\Payment\DonationGateway;
 use ZfDonate\Payment\Adapter\AdapterInterface;
 
 class PaymentFactory {

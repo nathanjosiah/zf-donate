@@ -7,6 +7,9 @@ use ZfDonate\Payment\PaymentResultEntity;
 use ZfDonate\Payment\Gateway\Forte\Message\PurchaseRequest;
 
 final class ForteAdapter extends AbstractAdapter {
+	/**
+	 * @var \ZfDonate\Payment\Gateway\Forte\HttpGateway
+	 */
 	private $gateway;
 
 	/**

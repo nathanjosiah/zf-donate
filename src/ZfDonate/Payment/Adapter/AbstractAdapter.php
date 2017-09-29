@@ -34,6 +34,7 @@ abstract class AbstractAdapter implements AdapterInterface {
 		];
 
 		$options['card'] = new CreditCard($base_data);
+
 		return $options;
 	}
 }
