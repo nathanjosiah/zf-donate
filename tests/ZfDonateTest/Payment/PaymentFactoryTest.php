@@ -17,13 +17,13 @@ class PaymentFactoryTest extends \PHPUnit_Framework_TestCase {
 			'zf-donate' => [
 				'configurations' => [
 					'mygateway' => [
-						'adapter' => 'SomeAdapter',
+						'gateway' => 'SomeAdapter',
 						'options' => [
 							'myoption' => 'abc123',
 						],
 					]
 				],
-				'adapters' => [
+				'gateways' => [
 					'SomeAdapter' => [
 						'adapter' => 'customadapter',
 						'gateway' => 'customgateway',

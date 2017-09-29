@@ -19,7 +19,7 @@ class PaymentFactory {
 
 		$gateway_config = $module_config['configurations'][$configuration_name];
 
-		$adapter_config = $module_config['adapters'][$gateway_config['adapter']];
+		$adapter_config = $module_config['gateways'][$gateway_config['gateway']];
 
 		$adapter = $this->serviceLocator->get($adapter_config['adapter']);
 		if(!$adapter instanceof AdapterInterface) {

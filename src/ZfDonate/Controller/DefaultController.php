@@ -1,80 +1,118 @@
 <?php
-
 namespace ZfDonate\Controller;
 
+use Zend\EventManager\EventManager;
+use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
+use ZfDonate\Event\DonationEvent;
+use ZfDonate\Model\Adapter\FormAdapterInterface;
+use ZfDonate\Model\Adapter\StorageAdapterInterface;
+use ZfDonate\Model\DonationEntity;
+use ZfDonate\Payment\DonationGateway;
 
 class DefaultController extends AbstractActionController {
+	const EVENT_PROCESS_DONATION = 'process';
+	const EVENT_STORE_DONATION = 'store';
+	const EVENT_FINISH = 'finish';
+
+	protected $entity,$form,$formAdapter,$storageAdapter,$donationGateway,$eventManager,$zfdonateConfig,$event;
+	public function __construct(
+		DonationGateway $donationGateway,
+		FormAdapterInterface $formAdapter,
+		?StorageAdapterInterface $storageAdapter,
+		DonationEntity $entity,
+		Form $form,
+		EventManager $eventManager,
+		array $zfdonateConfig
+	) {
+		$this->donationGateway = $donationGateway;
+		$this->formAdapter = $formAdapter;
+		$this->storageAdapter = $storageAdapter;
+		$this->entity = $entity;
+		$this->form = $form;
+		$this->eventManager = $eventManager;
+		$this->zfdonateConfig = $zfdonateConfig;
+
+		$event = new DonationEvent();
+		$event->setTarget($this);
+		$event->setDonationEntity($this->entity);
+		$event->setDonationForm($this->form);
+		$this->event = $event;
+	}
 
 	public function donateAction() {
-		$form_entity = new DonationEntity();
-		$this->donateForm->bind($form_entity);
-
-		$this->donateForm->setAttribute('action',$this->url()->fromRoute('donate'));
+		//$this->form->setAttribute('action',$this->Url()->fromRoute($this->zfdonateConfig['routes']['page']));
 		$request = $this->getRequest();
-		$this->donateForm->processOptionsFromQuery($request->getQuery());
 
 		if($request->isPost()) {
-			$this->donateForm->setData($request->getPost());
+			$this->formAdapter->hydrateForm($this->form,$request->getPost());
 			if($this->donateForm->isValid()) {
-				$response = $this->donationGateway->processDonation($donation);
-				$this->donationTable->save($donation);
+				$this->formAdapter->hydrateEntity($this->form,$this->entity);
+
+				// Process the donation
+				$this->event->setName(self::EVENT_PROCESS_DONATION);
+				$this->eventManager->trigger($this->event);
+				$response = $this->donationGateway->processDonation($this->entity);
+
+				/*
+				 * This event should always fire because this is the only place
+				 * where the donation is fully processed.
+				 */
+				$this->event->setName(self::EVENT_STORE_DONATION);
+				$this->eventManager->trigger($this->event);
+				if($this->storageAdapter) {
+					$this->storageAdapter->save($this->entity);
+				}
 
 				if($response->errors) {
-					$messages = $this->donateForm->getMessages();
+					$messages = $this->form->getMessages();
 					$messages['cc'] = [
 						'number' => $response->errors,
 					];
-					$this->donateForm->setMessages($messages);
+					$this->form->setMessages($messages);
 				}
 				else {
-					$line_items = [];
-					$line_items[] = 'Donation: $' . number_format($recipt_donation,2);
-					$line_items[] = 'Total transaction amount: $' . number_format($recipt_total,2);
+					// Allow custom return for controller
+					$this->event->setName(self::EVENT_FINISH);
+					$event_results = $this->eventManager->trigger($this->event);
+					if($event_results->stopped()) {
+						// Return result from event
+						return $event_results->last();
+					}
 
-					$organization = $this->organizationsTable->fetchWithId($this->identity->organizationId);
-					$message = new \Zend\Mail\Message();
-					$message->setTo($donation->email);
-					$message->setFrom('noreply@ubergive.com');
-					$message->setSubject('Receipt for your transaction with ' . $organization->name);
-					$message->setBody('This is your receipt for your transaction with ' . $organization->name . '.
-
-' . implode("\n",$line_items) . '
-
-Blessings from the ' . $organization->name . ' team!');
-
-					$this->mailTransport->send($message);
-
-					return $this->Redirect()->toRoute('thank-you',[],['query' => [
-						'total' => $recipt_total,
-						'donation' => $recipt_donation,
-						'products' => $recipt_products
+					// Default EVENT_FINISH redirects to the confirmation route
+					return $this->Redirect()->toRoute($this->zfdonateConfig['routes']['confirmation'],[],['query' => [
+						'donation' => $this->entity->amount,
+						'fname' => $this->entity->firstName,
+						'lname' => $this->entity->lastName,
+						'email' => $this->entity->email,
 					]]);
 				}
-
 			}
 		}
 		else {
-			$this->donateForm->setData([
+			$this->formAdapter->setDefaultData($this->form,$request,$this->entity);
+			/*$this->form->setData([
 				'recurrence' => DonationEntity::RECUR_NONE
-			]);
+			]);*/
 		}
 
 		$vm = new ViewModel([
-			'page_title' => 'Donate',
-			'form' => $this->donateForm,
-			'app_config' => $this->appConfig,
-			'products' => $dbproducts
+			'form' => $this->form,
 		]);
-		$vm->setTemplate('page/app/donate');
+		$vm->setTemplate($this->zfdonateConfig['views']['form']);
 		return $vm;
 	}
 
-	public function thankYouAction() {
+	public function confirmationAction() {
+		$request = $this->getRequest();
 		$vm = new ViewModel([
-			'app_config' => $this->appConfig,
+			'donation' => $request->getQuery('donation'),
+			'first_name' => $request->getQuery('first_name'),
+			'last_name' => $request->getQuery('last_name'),
+			'email' => $request->getQuery('email'),
 		]);
-		$vm->setTemplate('page/app/thank-you');
+		$vm->setTemplate($this->zfdonateConfig['views']['thank_you']);
 		return $vm;
 	}
 }
