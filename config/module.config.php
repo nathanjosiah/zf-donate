@@ -55,6 +55,7 @@ return [
 			ZfDonate\Payment\Gateway\Forte\HttpGateway::class => Zend\ServiceManager\Factory\InvokableFactory::class,
 
 			ZfDonate\Event\ConfirmationEmailEventListener::class => ZfDonate\Event\ConfirmationEmailEventListenerServiceFactory::class,
+			ZfDonate\Event\ConfirmationRedirectListener::class => ZfDonate\Event\ConfirmationRedirectListenerServiceFactory::class,
 			ZfDonate\Payment\PaymentFactory::class => ZfDonate\Payment\PaymentFactoryServiceFactory::class,
 		]
 	],

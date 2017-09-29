@@ -51,7 +51,7 @@ class DefaultController extends AbstractActionController {
 
 				// Process the donation
 				$this->event->setName(self::EVENT_PROCESS_DONATION);
-				$this->eventManager->trigger($this->event);
+				$this->eventManager->triggerEvent($this->event);
 				$response = $this->donationGateway->processDonation($this->entity);
 
 				/*
@@ -59,7 +59,7 @@ class DefaultController extends AbstractActionController {
 				 * where the donation is fully processed.
 				 */
 				$this->event->setName(self::EVENT_STORE_DONATION);
-				$this->eventManager->trigger($this->event);
+				$this->eventManager->triggerEvent($this->event);
 				if($this->storageAdapter) {
 					$this->storageAdapter->save($this->entity);
 				}
@@ -72,21 +72,16 @@ class DefaultController extends AbstractActionController {
 					$this->form->setMessages($messages);
 				}
 				else {
-					// Allow custom return for controller
+					/*
+					 * Allow custom return for controller
+					 * Default behavior is to redirect to confirmation route.
+					 */
 					$this->event->setName(self::EVENT_FINISH);
-					$event_results = $this->eventManager->trigger($this->event);
+					$event_results = $this->eventManager->triggerEvent($this->event);
 					if($event_results->stopped()) {
 						// Return result from event
 						return $event_results->last();
 					}
-
-					// Default EVENT_FINISH redirects to the confirmation route
-					return $this->Redirect()->toRoute($this->zfdonateConfig['routes']['confirmation'],[],['query' => [
-						'donation' => $this->entity->amount,
-						'fname' => $this->entity->firstName,
-						'lname' => $this->entity->lastName,
-						'email' => $this->entity->email,
-					]]);
 				}
 			}
 		}
@@ -107,7 +102,7 @@ class DefaultController extends AbstractActionController {
 	public function confirmationAction() {
 		$request = $this->getRequest();
 		$vm = new ViewModel([
-			'donation' => $request->getQuery('donation'),
+			'amount' => $request->getQuery('amount'),
 			'first_name' => $request->getQuery('first_name'),
 			'last_name' => $request->getQuery('last_name'),
 			'email' => $request->getQuery('email'),

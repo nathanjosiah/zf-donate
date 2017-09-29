@@ -2,22 +2,18 @@
 namespace ZfDonate\Controller;
 
 use Zend\EventManager\EventManager;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
+use ZfDonate\Event\ConfirmationEmailEventListener;
+use ZfDonate\Event\ConfirmationRedirectListener;
 
 class DefaultControllerServiceFactory implements FactoryInterface {
-	/**
-	 * ZF2 Compatibility
-	 */
-	public function createService(\Zend\ServiceManager\ServiceLocatorInterface $container) {
-		return $this($container,'');
-	}
-
-	public function __invoke(\Interop\Container\ContainerInterface $controllers,$requested_name,array $options = null) {
-		$container = (is_subclass_of($controllers,\Zend\ServiceManager\ServiceManager::class) ? $controllers->getServiceLocator() : $controllers);
-
+	public function __invoke(\Interop\Container\ContainerInterface $container,$requested_name,array $options = null) {
 		$config = $container->get('Config')['zf-donate'];
-		$event_manager = new EventManager($container->get('SharedEventManager'));
-		$event_manager->setIdentifiers([DefaultController::class]);
+		$event_manager = new EventManager($container->get('SharedEventManager'),[DefaultController::class]);
+
+		// Attach the default listeners
+		$container->get(ConfirmationEmailEventListener::class)->attach($event_manager);
+		$container->get(ConfirmationRedirectListener::class)->attach($event_manager);
 
 		$payment_factory = $container->get(\ZfDonate\Payment\PaymentFactory::class);
 		// @TODO there needs to be a way to change this

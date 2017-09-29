@@ -19,7 +19,7 @@ class ConfirmationEmailEventListener extends AbstractListenerAggregate {
 	}
 
 	public function attach(EventManagerInterface $events, $priority = 1) {
-		$events->attach(DefaultController::EVENT_FINISH,[$this,'sendEmail',-10]);
+		$events->attach(DefaultController::EVENT_FINISH,[$this,'sendEmail'],-10);
 	}
 
 	public function sendEmail(DonationEvent $donationEvent) {
