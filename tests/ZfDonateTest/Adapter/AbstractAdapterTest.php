@@ -47,9 +47,9 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase {
 			'expiryYear' => (int)$donation->ccExpirationYear,
 			'cvv' => $donation->ccV,
 			'billingFirstName' => 'firstName',
-		    'shippingFirstName' => 'firstName',
-		    'billingLastName' => 'lastName',
-		    'shippingLastName' => 'lastName',
+			'shippingFirstName' => 'firstName',
+			'billingLastName' => 'lastName',
+			'shippingLastName' => 'lastName',
 		];
 		$base_options = $stub->getOptions($donation);
 		$this->assertSame(12.34,$base_options['amount']);

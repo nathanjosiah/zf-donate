@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: NathanS
- * Date: 9/29/2017
- * Time: 1:59 PM
- */
-
 namespace ZfDonate\Event;
 
 
@@ -21,6 +14,7 @@ class DonationEvent extends Event  {
 	public function getDonationEntity() : DonationEntity {
 		return $this->getParam('entity');
 	}
+
 	public function setDonationForm(FormInterface $form) : void {
 		$this->setParam('form',$form);
 	}

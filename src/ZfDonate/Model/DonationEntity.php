@@ -11,7 +11,6 @@ class DonationEntity {
 
 	public
 	$id,
-	$organizationId,
 	$amount,
 	$recurrence,
 	$firstName,
