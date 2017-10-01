@@ -1,5 +1,5 @@
 <?php
-namespace ZfDonateTest\Adapter;
+namespace ZfDonateTest\Payment\Adapter;
 
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\RequestInterface;

@@ -1,5 +1,5 @@
 <?php
-namespace ZfDonateTest\Adapter;
+namespace ZfDonateTest\Payment\Adapter;
 
 
 use ZfDonate\Model\DonationEntity;
