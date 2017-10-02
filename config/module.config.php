@@ -40,19 +40,12 @@ return [
 				'adapter' => ZfDonate\Payment\Adapter\StripeAdapter::class,
 				'gateway' => ZfDonate\Payment\Gateway\Stripe\StripeGateway::class,
 			],
-			'Forte' => [
-				'adapter' => ZfDonate\Payment\Adapter\ForteAdapter::class,
-				'gateway' => ZfDonate\Payment\Gateway\Forte\HttpGateway::class,
-			],
 		]
 	],
 	'service_manager' => [
 		'factories' => [
 			ZfDonate\Payment\Adapter\StripeAdapter::class => Zend\ServiceManager\Factory\InvokableFactory::class,
 			ZfDonate\Payment\Gateway\Stripe\StripeGateway::class => Zend\ServiceManager\Factory\InvokableFactory::class,
-
-			ZfDonate\Payment\Adapter\ForteAdapter::class => Zend\ServiceManager\Factory\InvokableFactory::class,
-			ZfDonate\Payment\Gateway\Forte\HttpGateway::class => Zend\ServiceManager\Factory\InvokableFactory::class,
 
 			ZfDonate\Event\ConfirmationEmailEventListener::class => ZfDonate\Event\ConfirmationEmailEventListenerServiceFactory::class,
 			ZfDonate\Event\ConfirmationRedirectListener::class => ZfDonate\Event\ConfirmationRedirectListenerServiceFactory::class,
