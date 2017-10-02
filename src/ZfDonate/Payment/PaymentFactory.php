@@ -34,5 +34,9 @@ class PaymentFactory {
 
 		return new DonationGateway($adapter,$configuration_name);
 	}
+
+	public function getServiceLocator() : ServiceLocatorInterface {
+		return $this->serviceLocator;
+	}
 }
 
