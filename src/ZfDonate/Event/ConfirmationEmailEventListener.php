@@ -38,7 +38,7 @@ class ConfirmationEmailEventListener extends AbstractListenerAggregate {
 		$message = new \Zend\Mail\Message();
 		$message->setTo($donation->email);
 		$message->setFrom($email_config['from_email'],$email_config['from_name']);
-		$message->setSubject($email_config['subject']);
+		$message->setSubject($email_config['subject_line']);
 		$message->setBody($email_body);
 
 		$this->transport->send($message);
