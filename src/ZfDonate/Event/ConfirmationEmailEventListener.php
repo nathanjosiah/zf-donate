@@ -43,4 +43,16 @@ class ConfirmationEmailEventListener extends AbstractListenerAggregate {
 
 		$this->transport->send($message);
 	}
+
+	public function getTransport() : TransportInterface {
+		return $this->transport;
+	}
+
+	public function getView() : View {
+		return $this->view;
+	}
+
+	public function getConfig() : array {
+		return $this->zfdonateConfig;
+	}
 }

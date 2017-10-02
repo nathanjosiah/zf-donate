@@ -29,4 +29,8 @@ class ConfirmationRedirectListener extends AbstractListenerAggregate {
 			'email' => $donation->email,
 		]]);
 	}
+
+	public function getConfig() : array {
+		return $this->zfdonateConfig;
+	}
 }
