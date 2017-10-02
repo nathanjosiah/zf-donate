@@ -4,6 +4,7 @@ namespace ZfDonate\Controller;
 use Zend\EventManager\EventManager;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 use ZfDonate\Event\DonationEvent;
 use ZfDonate\Model\Adapter\FormAdapterInterface;
 use ZfDonate\Model\Adapter\StorageAdapterInterface;
@@ -15,7 +16,7 @@ class DefaultController extends AbstractActionController {
 	const EVENT_STORE_DONATION = 'store';
 	const EVENT_FINISH = 'finish';
 
-	protected $entity,$form,$formAdapter,$storageAdapter,$donationGateway,$eventManager,$zfdonateConfig,$event;
+	protected $entity,$form,$formAdapter,$storageAdapter,$donationGateway,$eventManager,$zfdonateConfig,$donationEvent;
 	public function __construct(
 		DonationGateway $donationGateway,
 		FormAdapterInterface $formAdapter,
@@ -37,29 +38,29 @@ class DefaultController extends AbstractActionController {
 		$event->setTarget($this);
 		$event->setDonationEntity($this->entity);
 		$event->setDonationForm($this->form);
-		$this->event = $event;
+		$this->donationEvent = $event;
 	}
 
-	public function donateAction() {
+	public function indexAction() {
 		//$this->form->setAttribute('action',$this->Url()->fromRoute($this->zfdonateConfig['routes']['page']));
 		$request = $this->getRequest();
 
 		if($request->isPost()) {
-			$this->formAdapter->hydrateForm($this->form,$request->getPost());
-			if($this->donateForm->isValid()) {
+			$this->formAdapter->hydrateForm($this->form,$this->entity,$request->getPost()->toArray());
+			if($this->form->isValid()) {
 				$this->formAdapter->hydrateEntity($this->form,$this->entity);
 
 				// Process the donation
-				$this->event->setName(self::EVENT_PROCESS_DONATION);
-				$this->eventManager->triggerEvent($this->event);
+				$this->donationEvent->setName(self::EVENT_PROCESS_DONATION);
+				$this->eventManager->triggerEvent($this->donationEvent);
 				$response = $this->donationGateway->processDonation($this->entity);
 
 				/*
 				 * This event should always fire because this is the only place
 				 * where the donation is fully processed.
 				 */
-				$this->event->setName(self::EVENT_STORE_DONATION);
-				$this->eventManager->triggerEvent($this->event);
+				$this->donationEvent->setName(self::EVENT_STORE_DONATION);
+				$this->eventManager->triggerEvent($this->donationEvent);
 				if($this->storageAdapter) {
 					$this->storageAdapter->save($this->entity);
 				}
@@ -76,8 +77,8 @@ class DefaultController extends AbstractActionController {
 					 * Allow custom return for controller
 					 * Default behavior is to redirect to confirmation route.
 					 */
-					$this->event->setName(self::EVENT_FINISH);
-					$event_results = $this->eventManager->triggerEvent($this->event);
+					$this->donationEvent->setName(self::EVENT_FINISH);
+					$event_results = $this->eventManager->triggerEvent($this->donationEvent);
 					if($event_results->stopped()) {
 						// Return result from event
 						return $event_results->last();

@@ -6,6 +6,10 @@ use ZfDonate\Model\Adapter\DefaultFormAdapter;
 use ZfDonate\Model\DonationEntity;
 
 class DefaultFormAdapterTest extends \PHPUnit_Framework_TestCase {
+
+	/**
+	 * @covers \ZfDonate\Model\Adapter\DefaultFormAdapter::setDefaultData
+	 */
 	public function testHydrateForm() {
 		$entity = new DonationEntity();
 		$form = $this->getForm();

@@ -4,8 +4,6 @@ namespace ZfDonate\Payment;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfDonate\Payment\Gateway\OptionsAwareInterface;
-use ZfDonate\Payment\Adapter\Exception\BadAdapterException;
-use ZfDonate\Payment\Adapter\AdapterInterface;
 
 class PaymentFactory {
 	private $serviceLocator;
@@ -22,9 +20,6 @@ class PaymentFactory {
 		$adapter_config = $module_config['gateways'][$gateway_config['gateway']];
 
 		$adapter = $this->serviceLocator->get($adapter_config['adapter']);
-		if(!$adapter instanceof AdapterInterface) {
-			throw new BadAdapterException(sprintf('Adapter "%s" needs to implement %s.',$adapter_config['adapter'],AdapterInterface::class));
-		}
 
 		$gateway = $this->serviceLocator->get($adapter_config['gateway']);
 		if($gateway instanceof OptionsAwareInterface) {
