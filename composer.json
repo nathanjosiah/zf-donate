@@ -29,5 +29,10 @@
 			"ZfDonate\\" : "src/ZfDonate/",
 			"ZfDonateTest\\" : "tests/ZfDonateTest/"
 		}
+	},
+	"scripts": {
+		"test": "phpunit --colors=always",
+		"test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+		"upload-coverage": "coveralls -v"
 	}
 }

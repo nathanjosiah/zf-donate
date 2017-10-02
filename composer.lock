@@ -993,16 +993,16 @@
         },
         {
             "name": "zendframework/zend-hydrator",
-            "version": "2.3.0",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-hydrator.git",
-                "reference": "7aa33949227fcabb5634a61f97fe78cccbb25c98"
+                "reference": "de0d6465fbc4b7ca345fddc148834c321c4b361f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-hydrator/zipball/7aa33949227fcabb5634a61f97fe78cccbb25c98",
-                "reference": "7aa33949227fcabb5634a61f97fe78cccbb25c98",
+                "url": "https://api.github.com/repos/zendframework/zend-hydrator/zipball/de0d6465fbc4b7ca345fddc148834c321c4b361f",
+                "reference": "de0d6465fbc4b7ca345fddc148834c321c4b361f",
                 "shasum": ""
             },
             "require": {
@@ -1051,7 +1051,7 @@
                 "hydrator",
                 "zf2"
             ],
-            "time": "2017-09-20T22:02:25+00:00"
+            "time": "2017-10-02T15:01:27+00:00"
         },
         {
             "name": "zendframework/zend-inputfilter",
