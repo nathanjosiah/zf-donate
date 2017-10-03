@@ -7,10 +7,7 @@ use Zend\Form\Form;
 use Zend\Mail\Message;
 use Zend\Mail\Transport\TransportInterface;
 use Zend\View\Model\ViewModel;
-use Zend\View\Renderer\PhpRenderer;
-use Zend\View\Resolver\TemplateMapResolver;
-use Zend\View\Strategy\PhpRendererStrategy;
-use Zend\View\View;
+use Zend\View\Renderer\RendererInterface;
 use ZfDonate\Controller\DefaultController;
 use ZfDonate\Event\ConfirmationEmailEventListener;
 use ZfDonate\Event\DonationEvent;
@@ -19,7 +16,7 @@ use ZfDonate\Model\DonationEntity;
 class ConfirmationEmailEventListenerTest extends \PHPUnit_Framework_TestCase {
 	public function testSendsEmailWithProperViewModel() {
 		$transport = $this->getMockBuilder(TransportInterface::class)->getMock();
-		$view = $this->getMockBuilder(View::class)->disableOriginalConstructor()->getMock();
+		$view = $this->getMockBuilder(RendererInterface::class)->disableOriginalConstructor()->getMock();
 		$config = [
 			'views' => [
 				'email' => 'myemail',
@@ -61,7 +58,10 @@ class ConfirmationEmailEventListenerTest extends \PHPUnit_Framework_TestCase {
 				&& $mail->getSubject() === 'mysubject'
 				&& $mail->getFrom()->current()->getName() === 'myname'
 				&& $mail->getFrom()->current()->getEmail() === 'myfromemail@example.com'
-				&& $mail->getBody() === 'mybody'
+				&& $mail->getBody() instanceof \Zend\Mime\Message
+				&& !empty($mail->getBody()->getParts()[0])
+				&& $mail->getBody()->getParts()[0]->type === 'text/html'
+				&& $mail->getBody()->getParts()[0]->getContent() === 'mybody'
 			);;
 		}));
 		// Trigger the event

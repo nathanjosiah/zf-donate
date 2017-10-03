@@ -3,14 +3,14 @@ namespace ZfDonateTest\Event;
 
 use Zend\Mail\Transport\TransportInterface;
 use Zend\ServiceManager\ServiceManager;
-use Zend\View\View;
+use Zend\View\Renderer\RendererInterface;
 use ZfDonate\Event\ConfirmationEmailEventListener;
 use ZfDonate\Event\ConfirmationEmailEventListenerServiceFactory;
 
 class ConfirmationEmailEventListenerServiceFactoryTest extends \PHPUnit_Framework_TestCase {
 	public function testFactory() {
 		$transport = $this->getMockBuilder(TransportInterface::class)->getMock();
-		$view = $this->getMockBuilder(View::class)->disableOriginalConstructor()->getMock();
+		$view = $this->getMockBuilder(RendererInterface::class)->disableOriginalConstructor()->getMock();
 		$config = [
 			'email' => [
 				'transport' => 'mytransport',
@@ -19,7 +19,7 @@ class ConfirmationEmailEventListenerServiceFactoryTest extends \PHPUnit_Framewor
 		$service_manager = new ServiceManager([
 			'services' => [
 				'mytransport' => $transport,
-				'View' => $view,
+				'ViewRenderer' => $view,
 				'Config' => [
 					'zf-donate' => $config
 				]

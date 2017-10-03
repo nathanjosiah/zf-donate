@@ -88,9 +88,6 @@ class DefaultController extends AbstractActionController {
 		}
 		else {
 			$this->formAdapter->setDefaultData($this->form,$request,$this->entity);
-			/*$this->form->setData([
-				'recurrence' => DonationEntity::RECUR_NONE
-			]);*/
 		}
 
 		$vm = new ViewModel([
@@ -104,8 +101,8 @@ class DefaultController extends AbstractActionController {
 		$request = $this->getRequest();
 		$vm = new ViewModel([
 			'amount' => $request->getQuery('amount'),
-			'first_name' => $request->getQuery('first_name'),
-			'last_name' => $request->getQuery('last_name'),
+			'first_name' => $request->getQuery('fname'),
+			'last_name' => $request->getQuery('lname'),
 			'email' => $request->getQuery('email'),
 		]);
 		$vm->setTemplate($this->zfdonateConfig['views']['thank_you']);

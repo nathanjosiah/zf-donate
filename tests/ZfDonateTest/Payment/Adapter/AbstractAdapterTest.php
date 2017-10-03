@@ -52,6 +52,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase {
 			'shippingLastName' => 'lastName',
 		];
 		$base_options = $stub->getOptions($donation);
+		$this->assertSame('USD',$base_options['currency']);
 		$this->assertSame(12.34,$base_options['amount']);
 		$this->assertInstanceOf(CreditCard::class,$base_options['card']);
 		$this->assertEquals($expected,$base_options['card']->getParameters());

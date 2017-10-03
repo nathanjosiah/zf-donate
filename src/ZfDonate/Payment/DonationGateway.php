@@ -19,7 +19,7 @@ class DonationGateway {
 	 * @return \ZfDonate\Payment\PaymentResultEntity
 	 */
 	public function processDonation(DonationEntity $donation) {
-		if($donation->recurrence === DonationEntity::RECUR_MONTHLY) {
+		if($donation->recurring) {
 			$result = $this->adapter->processMonthly($donation);
 		}
 		else {

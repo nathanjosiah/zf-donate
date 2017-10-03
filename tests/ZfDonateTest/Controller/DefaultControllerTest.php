@@ -199,8 +199,8 @@ class DefaultControllerTest extends \PHPUnit_Framework_TestCase {
 		$request = new Request();
 		$request->setQuery(new Parameters([
 			'amount' => '12.34',
-			'first_name' => 'John',
-			'last_name' => 'Doe',
+			'fname' => 'John',
+			'lname' => 'Doe',
 			'email' => 'myemail',
 		]));
 		$event = new MvcEvent();

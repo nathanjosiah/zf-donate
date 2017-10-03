@@ -16,7 +16,7 @@ class DonationGatewayTest extends \PHPUnit_Framework_TestCase {
 		$result->transactionId = 456;
 		$result->avsResult = 'valid or whatever';
 		$donation = new DonationEntity();
-		$donation->recurrence = DonationEntity::RECUR_NONE;
+		$donation->recurring = false;
 		$donation->ccNumber = '4111111111111111';
 
 		$gateway = new DonationGateway($adapter,'foo');
@@ -44,7 +44,7 @@ class DonationGatewayTest extends \PHPUnit_Framework_TestCase {
 		$result->transactionId = 456;
 		$result->avsResult = 'valid or whatever';
 		$donation = new DonationEntity();
-		$donation->recurrence = DonationEntity::RECUR_MONTHLY;
+		$donation->recurring = true;
 		$donation->ccNumber = '4111111111111111';
 
 		$gateway = new DonationGateway($adapter,'foo');

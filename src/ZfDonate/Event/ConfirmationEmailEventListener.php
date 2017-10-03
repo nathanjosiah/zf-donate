@@ -6,20 +6,20 @@ use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mail\Transport\TransportInterface;
 use Zend\View\Model\ViewModel;
-use Zend\View\View;
+use Zend\View\Renderer\RendererInterface;
 use ZfDonate\Controller\DefaultController;
 
 class ConfirmationEmailEventListener extends AbstractListenerAggregate {
 	protected $transport,$zfdonateConfig,$view;
 
-	public function __construct(TransportInterface $transport,View $view,array $zfdonateConfig) {
+	public function __construct(TransportInterface $transport,RendererInterface $view,array $zfdonateConfig) {
 		$this->transport = $transport;
 		$this->view = $view;
 		$this->zfdonateConfig = $zfdonateConfig;
 	}
 
 	public function attach(EventManagerInterface $events, $priority = 1) {
-		$events->attach(DefaultController::EVENT_FINISH,[$this,'sendEmail'],-10);
+		$events->attach(DefaultController::EVENT_FINISH,[$this,'sendEmail'],10);
 	}
 
 	public function sendEmail(DonationEvent $donationEvent) {
@@ -39,7 +39,12 @@ class ConfirmationEmailEventListener extends AbstractListenerAggregate {
 		$message->setTo($donation->email);
 		$message->setFrom($email_config['from_email'],$email_config['from_name']);
 		$message->setSubject($email_config['subject_line']);
-		$message->setBody($email_body);
+
+		$htmlPart = new \Zend\Mime\Part($email_body);
+		$htmlPart->type = 'text/html';
+		$body = new \Zend\Mime\Message();
+		$body->setParts([$htmlPart]);
+		$message->setBody($body);
 
 		$this->transport->send($message);
 	}
@@ -48,7 +53,7 @@ class ConfirmationEmailEventListener extends AbstractListenerAggregate {
 		return $this->transport;
 	}
 
-	public function getView() : View {
+	public function getView() : RendererInterface {
 		return $this->view;
 	}
 

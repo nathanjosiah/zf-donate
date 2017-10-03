@@ -1,8 +1,5 @@
 <?php
 return [
-	/*
-	 * post -> controller -> (donationentity <- formadapter <- form) -> gatewayadapter then donationentity -> storage adapter
-	 */
 	'zf-donate' => [
 		'form' => ZfDonate\Form\DonateForm::class,
 		'controller' => ZfDonate\Controller\DefaultController::class,
@@ -29,9 +26,9 @@ return [
 			'default' => [
 				'gateway' => 'Stripe',
 				'options' => [
-					'api_key' => 'sk_test_R7BQQgxmG4txeZfdRLvrBhH9',
+					'api_key' => 'your_key_here',
 					'monthly_plan_name' => 'my_plan',
-					'test_mode' => true,
+					'test_mode' => false,
 				],
 			]
 		],
@@ -47,6 +44,8 @@ return [
 			ZfDonate\Payment\Adapter\StripeAdapter::class => Zend\ServiceManager\Factory\InvokableFactory::class,
 			ZfDonate\Payment\Gateway\Stripe\StripeGateway::class => Zend\ServiceManager\Factory\InvokableFactory::class,
 
+			ZfDonate\Model\DonationEntity::class => Zend\ServiceManager\Factory\InvokableFactory::class,
+			ZfDonate\Model\Adapter\DefaultFormAdapter::class => Zend\ServiceManager\Factory\InvokableFactory::class,
 			ZfDonate\Event\ConfirmationEmailEventListener::class => ZfDonate\Event\ConfirmationEmailEventListenerServiceFactory::class,
 			ZfDonate\Event\ConfirmationRedirectListener::class => ZfDonate\Event\ConfirmationRedirectListenerServiceFactory::class,
 			ZfDonate\Payment\PaymentFactory::class => ZfDonate\Payment\PaymentFactoryServiceFactory::class,
@@ -59,13 +58,7 @@ return [
 	],
 	'controllers' => [
 		'factories' => [
-			ZfDonate\Controller\DefaultController::class => ZfDonate\Controller\DefaultController::class,
-		]
-	],
-	'slm_mail' => [
-		'mailgun' => [
-			'domain' => '',
-			'key' => '',
+			ZfDonate\Controller\DefaultController::class => ZfDonate\Controller\DefaultControllerServiceFactory::class,
 		]
 	],
 ];

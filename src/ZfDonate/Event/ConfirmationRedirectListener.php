@@ -13,7 +13,7 @@ class ConfirmationRedirectListener extends AbstractListenerAggregate {
 	}
 
 	public function attach(EventManagerInterface $events, $priority = 1) {
-		$events->attach(DefaultController::EVENT_FINISH,[$this,'redirect'],1000);
+		$events->attach(DefaultController::EVENT_FINISH,[$this,'redirect'],-1000);
 	}
 
 	public function redirect(DonationEvent $donationEvent) {

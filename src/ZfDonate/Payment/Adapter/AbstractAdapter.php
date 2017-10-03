@@ -8,6 +8,7 @@ use Omnipay\Common\CreditCard;
 abstract class AbstractAdapter implements AdapterInterface {
 	protected function getOptions(DonationEntity $donation) : array {
 		$options = [
+			'currency' => 'USD',
 			'amount' => (float)$donation->amount,
 		];
 

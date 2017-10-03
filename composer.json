@@ -30,6 +30,11 @@
 			"ZfDonateTest\\" : "tests/ZfDonateTest/"
 		}
 	},
+	"extra": {
+		"zf": {
+			"module": "ZfDonate"
+		}
+	},
 	"scripts": {
 		"test": "phpunit --colors=always",
 		"test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
