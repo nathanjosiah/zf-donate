@@ -112,7 +112,7 @@ class DefaultControllerTest extends \PHPUnit_Framework_TestCase {
 		$formAdapter->expects($this->once())->method('hydrateEntity')->with($form,$donationEntity);
 		$formAdapter->expects($this->once())->method('hydrateForm')->with($form,$donationEntity,['mydata'=>'foo']);
 		$form->expects($this->once())->method('getMessages')->willReturn([]);
-		$form->expects($this->once())->method('setMessages')->with(['cc'=>['number' => ['oh noe']]]);
+		$form->expects($this->once())->method('setMessages')->with(['cc_number' => ['oh noe']]);
 		$donationGateway->expects($this->once())->method('processDonation')->with($donationEntity)->willReturn($donation_result);
 		$form->expects($this->once())->method('isValid')->willReturn(true);
 

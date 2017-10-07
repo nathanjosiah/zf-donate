@@ -67,9 +67,7 @@ class DefaultController extends AbstractActionController {
 
 				if($response->errors) {
 					$messages = $this->form->getMessages();
-					$messages['cc'] = [
-						'number' => $response->errors,
-					];
+					$messages['cc_number'] = $response->errors;
 					$this->form->setMessages($messages);
 				}
 				else {
