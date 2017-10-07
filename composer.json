@@ -9,11 +9,17 @@
 		"zendframework/zend-mvc" : "^3.0.1",
 		"zendframework/zend-mail" : "^2.7.1",
 		"slm/mail" : "^2",
-		"omnipay/stripe" : "^2"
+		"omnipay/stripe" : "dev-fix/88"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "^5.7"
 	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/nathanjosiah/omnipay-stripe"
+		}
+	],
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Nathan Smith",
