@@ -14,6 +14,10 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$gateway = $this->getMockBuilder(StripeGateway::class)->disableOriginalConstructor()->getMock();
 		$request = $this->getMockBuilder(RequestInterface::class)->getMock();
 		$response = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
+		$token_request = $this->getMockBuilder(RequestInterface::class)->getMock();
+		$token_response = new Response($request,['object'=>'token','id'=>'my_generated_token']);
+		$token_request->expects($this->once())->method('send')->willReturn($token_response);
+		$gateway->expects($this->once())->method('createToken')->willReturn($token_request);
 
 		$adapter = new StripeAdapter();
 		$adapter->setGateway($gateway);
@@ -23,7 +27,8 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$gateway->expects($this->once())->method('purchase')->with($this->callback(function($options) {
 			return (
 				$options['amount'] === 12.34
-				&& $options['card'] instanceof CreditCard
+				&& empty($options['card'])
+				&& $options['token'] === 'my_generated_token'
 				&& $options['apiKey'] === 'mykey'
 			);
 		}))->willReturn($request);
@@ -42,6 +47,10 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$gateway = $this->getMockBuilder(StripeGateway::class)->disableOriginalConstructor()->getMock();
 		$request = $this->getMockBuilder(RequestInterface::class)->getMock();
 		$response = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
+		$token_request = $this->getMockBuilder(RequestInterface::class)->getMock();
+		$token_response = new Response($request,['object'=>'token','id'=>'my_generated_token']);
+		$token_request->expects($this->once())->method('send')->willReturn($token_response);
+		$gateway->expects($this->once())->method('createToken')->willReturn($token_request);
 
 		$adapter = new StripeAdapter();
 		$adapter->setGateway($gateway);
@@ -51,7 +60,8 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$gateway->expects($this->once())->method('purchaseMonthly')->with($this->callback(function($options) {
 			return (
 				$options['amount'] === 12.34
-				&& $options['card'] instanceof CreditCard
+				&& empty($options['card'])
+				&& $options['token'] === 'my_generated_token'
 				&& $options['apiKey'] === 'mykey'
 			);
 		}))->willReturn($request);
@@ -71,6 +81,10 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$gateway = $this->getMockBuilder(StripeGateway::class)->disableOriginalConstructor()->getMock();
 		$request = $this->getMockBuilder(RequestInterface::class)->getMock();
 		$response = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
+		$token_request = $this->getMockBuilder(RequestInterface::class)->getMock();
+		$token_response = new Response($request,['object'=>'token','id'=>'my_generated_token']);
+		$token_request->expects($this->once())->method('send')->willReturn($token_response);
+		$gateway->expects($this->once())->method('createToken')->willReturn($token_request);
 
 		$adapter = new StripeAdapter();
 		$adapter->setGateway($gateway);
@@ -90,6 +104,10 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$gateway = $this->getMockBuilder(StripeGateway::class)->disableOriginalConstructor()->getMock();
 		$request = $this->getMockBuilder(RequestInterface::class)->getMock();
 		$response = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
+		$token_request = $this->getMockBuilder(RequestInterface::class)->getMock();
+		$token_response = new Response($request,['object'=>'token','id'=>'my_generated_token']);
+		$token_request->expects($this->once())->method('send')->willReturn($token_response);
+		$gateway->expects($this->once())->method('createToken')->willReturn($token_request);
 
 		$adapter = new StripeAdapter();
 		$adapter->setGateway($gateway);
