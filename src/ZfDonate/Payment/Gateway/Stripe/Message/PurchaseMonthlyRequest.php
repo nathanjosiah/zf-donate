@@ -6,9 +6,9 @@ class PurchaseMonthlyRequest extends \Omnipay\Stripe\Message\AbstractRequest {
 	public function getData() {
 		$data = [];
 		$data['quantity'] = (int)($this->getAmountInteger() / 100);
-		$data['email'] = $this->getCard()->getEmail();
+		$data['email'] = $this->getParameter('email');
 		$data['plan'] = $this->getParameter('plan_name');
-		$data['source'] = array_merge(['object' => 'card'],$this->getCardData());
+		$data['source'] = $this->getParameter('token');
 		return $data;
 	}
 
