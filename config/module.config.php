@@ -12,6 +12,7 @@ return [
 			'confirmation' => 'zfdonate-thank-you',
 		],
 		'email' => [
+			'enabled' => true,
 			'transport' => 'SlmMail\Mail\Transport\MailgunTransport',
 			'subject_line' => 'Thank you for your gift!',
 			'from_name' => 'Your name here',

@@ -26,6 +26,10 @@ class ConfirmationEmailEventListener extends AbstractListenerAggregate {
 		$donation = $donationEvent->getDonationEntity();
 		$email_config = $this->zfdonateConfig['email'];
 
+		if(empty($email_config['enabled'])) {
+			return;
+		}
+
 		// Render the email
 		$view_model = new ViewModel([
 			'donation_entity' => $donation,
@@ -46,7 +50,12 @@ class ConfirmationEmailEventListener extends AbstractListenerAggregate {
 		$body->setParts([$htmlPart]);
 		$message->setBody($body);
 
-		$this->transport->send($message);
+		try {
+			$this->transport->send($message);
+		}
+		catch(\Exception $exception) {
+			// Log or something?
+		}
 	}
 
 	public function getTransport() : TransportInterface {
