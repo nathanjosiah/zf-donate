@@ -22,6 +22,7 @@ class ConfirmationEmailEventListenerTest extends \PHPUnit_Framework_TestCase {
 				'email' => 'myemail',
 			],
 			'email' => [
+				'enabled' => true,
 				'subject_line' => 'mysubject',
 				'from_name' => 'myname',
 				'from_email' => 'myfromemail@example.com',

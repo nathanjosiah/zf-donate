@@ -7,6 +7,18 @@ use ZfDonate\Payment\Gateway\OptionsAwareInterface;
 
 class StripeGateway extends Gateway implements OptionsAwareInterface {
 	private $planName;
+
+	/**
+	 * @param array $parameters
+	 * @return \Omnipay\Stripe\Message\PurchaseRequest
+	 */
+	public function purchase(array $parameters = array()) {
+		if($this->getParameter('plan_name')) {
+			$parameters['plan_name'] = $this->getParameter('plan_name');
+		}
+		return $this->createRequest(\ZfDonate\Payment\Gateway\Stripe\Message\PurchaseSingleRequest::class,$parameters);
+	}
+
 	public function purchaseMonthly(array $parameters) {
 		if($this->getParameter('plan_name')) {
 			$parameters['plan_name'] = $this->getParameter('plan_name');

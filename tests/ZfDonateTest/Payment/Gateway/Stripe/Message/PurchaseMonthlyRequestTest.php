@@ -13,32 +13,13 @@ class PurchaseMonthlyRequestTest extends \PHPUnit_Framework_TestCase {
 		$message->initialize();
 		$message->setPlanName('myplan');
 		$message->setAmount(12.54);
-		$message->setCard(new CreditCard([
-			'email' => 'foo@bar.com',
-			'number' => '4111111111111111',
-			'expiryMonth' => 7,
-			'expiryYear' => idate('Y') + 1,
-			'cvv' => '123',
-		]));
+		$message->setEmail('foo@bar.com');
+		$message->setToken('mytoken');
 		$data = $message->getData();
 		$this->assertSame(12,$data['quantity']);
 		$this->assertSame('foo@bar.com',$data['email']);
 		$this->assertSame('myplan',$data['plan']);
-		$this->assertSame([
-			'object'=>'card',
-			'number' => '4111111111111111',
-			'exp_month' => 7,
-			'exp_year' => 2018,
-			'cvc' => '123',
-			'name' => '',
-			'address_line1' => null,
-			'address_line2' => null,
-			'address_city' => null,
-			'address_zip' => null,
-			'address_state' => null,
-			'address_country' => null,
-			'email' => 'foo@bar.com',
-		],$data['source']);
+		$this->assertSame('mytoken',$data['source']);
 	}
 
 	public function testEndpoint() {
