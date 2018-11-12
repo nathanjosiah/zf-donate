@@ -20,15 +20,13 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 		$gateway->expects($this->once())
 			->method('createToken')
 			->with($this->callback(function(array $args) {
-				$this->assertSame('abc123', $args['customer']);
 				$this->assertInstanceOf(CreditCard::class, $args['card']);
-
 				return true;
 			}))
 			->willReturn($token_request);
 
 		$customerRequest = $this->getMockBuilder(RequestInterface::class)->disableOriginalConstructor()->getMock();
-		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"customer":"abc123"}'));
+		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"id":"abc123"}'));
 		$gateway->expects($this->once())
 			->method('createCustomer')
 			->with(['email' => 'foobar'])
@@ -45,6 +43,9 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 				&& empty($options['card'])
 				&& $options['token'] === 'my_generated_token'
 				&& $options['apiKey'] === 'mykey'
+				&& $options['customer'] === 'abc123'
+				&& !empty($options['metadata'])
+				&& $options['metadata']['email'] === 'foobar'
 			);
 		}))->willReturn($request);
 		$request->expects($this->once())->method('send')->willReturn($response);
@@ -69,7 +70,6 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 		$gateway->expects($this->once())
 			->method('createToken')
 			->with($this->callback(function(array $args) {
-				$this->assertSame('abc123', $args['customer']);
 				$this->assertInstanceOf(CreditCard::class, $args['card']);
 
 				return true;
@@ -77,7 +77,7 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 			->willReturn($token_request);
 
 		$customerRequest = $this->getMockBuilder(RequestInterface::class)->disableOriginalConstructor()->getMock();
-		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"customer":"abc123"}'));
+		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"id":"abc123"}'));
 		$gateway->expects($this->once())
 			->method('createCustomer')
 			->with(['email' => 'foobar'])
@@ -94,6 +94,8 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 				&& empty($options['card'])
 				&& $options['token'] === 'my_generated_token'
 				&& $options['apiKey'] === 'mykey'
+				&& !empty($options['metadata'])
+				&& $options['metadata']['email'] === 'foobar'
 			);
 		}))->willReturn($request);
 		$request->expects($this->once())->method('send')->willReturn($response);
@@ -119,7 +121,6 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 		$gateway->expects($this->once())
 			->method('createToken')
 			->with($this->callback(function(array $args) {
-				$this->assertSame('abc123', $args['customer']);
 				$this->assertInstanceOf(CreditCard::class, $args['card']);
 
 				return true;
@@ -127,7 +128,7 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 			->willReturn($token_request);
 
 		$customerRequest = $this->getMockBuilder(RequestInterface::class)->disableOriginalConstructor()->getMock();
-		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"customer":"abc123"}'));
+		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"id":"abc123"}'));
 		$gateway->expects($this->once())
 			->method('createCustomer')
 			->with(['email' => 'foobar'])
@@ -158,7 +159,6 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 		$gateway->expects($this->once())
 			->method('createToken')
 			->with($this->callback(function(array $args) {
-				$this->assertSame('abc123', $args['customer']);
 				$this->assertInstanceOf(CreditCard::class, $args['card']);
 
 				return true;
@@ -166,7 +166,7 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 			->willReturn($token_request);
 
 		$customerRequest = $this->getMockBuilder(RequestInterface::class)->disableOriginalConstructor()->getMock();
-		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"customer":"abc123"}'));
+		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"id":"abc123"}'));
 		$gateway->expects($this->once())
 			->method('createCustomer')
 			->with(['email' => 'foobar'])

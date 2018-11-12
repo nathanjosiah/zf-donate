@@ -37,7 +37,10 @@ final class StripeAdapter extends AbstractAdapter {
 		$customerResponse = $this->gateway->createCustomer([
 			'email' => $parameters['card']->getEmail()
 		])->send();
-		$params['customer'] = $customerResponse->getData()['customer'];
+		$parameters['customer'] = $customerResponse->getData()['id'];
+		$parameters['metadata'] = [
+			'email' => $parameters['card']->getEmail()
+		];
 		$token_request = $this->gateway->createToken($params);
 		$result = $token_request->send();
 		$parameters['token'] = $result->getToken();
