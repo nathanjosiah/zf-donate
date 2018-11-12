@@ -50,6 +50,7 @@ final class StripeAdapter extends AbstractAdapter {
 
 	public function processMonthly(DonationEntity $donation) : PaymentResultEntity {
 		$options = $this->getOptions($donation);
+		$options['email'] = $options['card']->getEmail();
 		$options = $this->convertCardToToken($options);
 		$request = $this->gateway->purchaseMonthly($options);
 

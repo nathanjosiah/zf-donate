@@ -83,6 +83,21 @@ class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 			->with(['email' => 'foobar'])
 			->willReturn($customerRequest);
 
+		$gateway->expects($this->once())
+			->method('purchaseMonthly')
+			->with([
+				'currency' => 'USD',
+				'email' => 'foobar',
+				'amount' => 12.34,
+				'customer' => 'abc123',
+				'metadata' => [
+					'email' => 'foobar'
+				],
+				'token' => 'my_generated_token',
+				'apiKey' => 'mykey'
+			])
+			->willReturn($request);
+
 		$adapter = new StripeAdapter();
 		$adapter->setGateway($gateway);
 
