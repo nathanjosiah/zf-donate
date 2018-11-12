@@ -5,7 +5,7 @@ use Zend\ServiceManager\ServiceManager;
 use ZfDonate\Payment\PaymentFactory;
 use ZfDonate\Payment\PaymentFactoryServiceFactory;
 
-class PaymentFactoryServiceFactoryTest extends \PHPUnit_Framework_TestCase {
+class PaymentFactoryServiceFactoryTest extends \PHPUnit\Framework\TestCase {
 	public function testFactory() {
 		$service_manager = new ServiceManager();
 		$factory = new PaymentFactoryServiceFactory();

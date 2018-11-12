@@ -5,7 +5,7 @@ use Zend\ServiceManager\ServiceManager;
 use ZfDonate\Event\ConfirmationRedirectListener;
 use ZfDonate\Event\ConfirmationRedirectListenerServiceFactory;
 
-class ConfirmationRedirectEventListenerServiceFactoryTest extends \PHPUnit_Framework_TestCase {
+class ConfirmationRedirectEventListenerServiceFactoryTest extends \PHPUnit\Framework\TestCase {
 	public function testFactory() {
 		$config = [
 			'my-settings' => 'these-are-them',

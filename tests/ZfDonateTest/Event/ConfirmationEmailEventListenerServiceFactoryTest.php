@@ -7,7 +7,7 @@ use Zend\View\Renderer\RendererInterface;
 use ZfDonate\Event\ConfirmationEmailEventListener;
 use ZfDonate\Event\ConfirmationEmailEventListenerServiceFactory;
 
-class ConfirmationEmailEventListenerServiceFactoryTest extends \PHPUnit_Framework_TestCase {
+class ConfirmationEmailEventListenerServiceFactoryTest extends \PHPUnit\Framework\TestCase {
 	public function testFactory() {
 		$transport = $this->getMockBuilder(TransportInterface::class)->getMock();
 		$view = $this->getMockBuilder(RendererInterface::class)->disableOriginalConstructor()->getMock();

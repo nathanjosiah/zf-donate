@@ -17,7 +17,7 @@ use ZfDonate\Payment\DonationGateway;
 use ZfDonate\Payment\PaymentResultEntity;
 use ZfDonateTest\Controller\TestAsset\EventListenerSpy;
 
-class DefaultControllerTest extends \PHPUnit_Framework_TestCase {
+class DefaultControllerTest extends \PHPUnit\Framework\TestCase {
 	public function testDonate_FirstVisit() {
 		$config = [
 			'views' => [

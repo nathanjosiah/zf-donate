@@ -8,7 +8,7 @@ use ZfDonate\Payment\Adapter\AdapterInterface;
 use ZfDonate\Payment\Gateway\OptionsAwareInterface;
 use Zend\ServiceManager\Config;
 
-class PaymentFactoryTest extends \PHPUnit_Framework_TestCase {
+class PaymentFactoryTest extends \PHPUnit\Framework\TestCase {
 	public function testGatewayIsConfiguredCorrectly() {
 		$pgateway = $this->getMockBuilder(OptionsAwareInterface::class)->getMock();
 		$adapter = $this->getMockBuilder(AdapterInterface::class)->getMock();

@@ -5,7 +5,7 @@ use Zend\Form\Form;
 use ZfDonate\Event\DonationEvent;
 use ZfDonate\Model\DonationEntity;
 
-class DonationEventTest extends \PHPUnit_Framework_TestCase {
+class DonationEventTest extends \PHPUnit\Framework\TestCase {
 	public function testParametersWorkWithSetters() {
 		$event = new DonationEvent();
 		$entity = new DonationEntity();

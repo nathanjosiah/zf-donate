@@ -5,7 +5,7 @@ use Zend\Form\Form;
 use ZfDonate\Model\Adapter\DefaultFormAdapter;
 use ZfDonate\Model\DonationEntity;
 
-class DefaultFormAdapterTest extends \PHPUnit_Framework_TestCase {
+class DefaultFormAdapterTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers \ZfDonate\Model\Adapter\DefaultFormAdapter::setDefaultData

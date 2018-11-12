@@ -5,7 +5,7 @@ use Omnipay\Common\CreditCard;
 use ZfDonate\Model\DonationEntity;
 use ZfDonate\Payment\Adapter\AbstractAdapter;
 
-class AbstractAdapterTest extends \PHPUnit_Framework_TestCase {
+class AbstractAdapterTest extends \PHPUnit\Framework\TestCase {
 	public function testOptionsAreMapped() {
 		$stub = new AbstractAdapterStub();
 		$donation = new DonationEntity();

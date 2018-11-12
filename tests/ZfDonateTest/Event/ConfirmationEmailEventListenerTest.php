@@ -13,7 +13,7 @@ use ZfDonate\Event\ConfirmationEmailEventListener;
 use ZfDonate\Event\DonationEvent;
 use ZfDonate\Model\DonationEntity;
 
-class ConfirmationEmailEventListenerTest extends \PHPUnit_Framework_TestCase {
+class ConfirmationEmailEventListenerTest extends \PHPUnit\Framework\TestCase {
 	public function testSendsEmailWithProperViewModel() {
 		$transport = $this->getMockBuilder(TransportInterface::class)->getMock();
 		$view = $this->getMockBuilder(RendererInterface::class)->disableOriginalConstructor()->getMock();

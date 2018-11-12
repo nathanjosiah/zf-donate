@@ -4,7 +4,7 @@ namespace ZfDonateTest\Form;
 
 use ZfDonate\Form\DonateForm;
 
-class DonateFormTest extends \PHPUnit_Framework_TestCase {
+class DonateFormTest extends \PHPUnit\Framework\TestCase {
 	public function testAllFieldsExist() {
 		$form = new DonateForm();
 		$form->init();

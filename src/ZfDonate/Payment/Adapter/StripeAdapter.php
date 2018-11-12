@@ -7,11 +7,11 @@ use ZfDonate\Payment\PaymentResultEntity;
 use Omnipay\Stripe\Message\Response;
 
 final class StripeAdapter extends AbstractAdapter {
+	/**
+	 * @var  $gateway \ZfDonate\Payment\Gateway\Stripe\StripeGateway
+	 */
 	private $gateway;
 
-	/**
-	 * @param $gateway \ZfDonate\Payment\Gateway\Stripe\StripeGateway
-	 */
 	public function setGateway($gateway) : void {
 		$this->gateway = $gateway;
 	}
@@ -33,7 +33,12 @@ final class StripeAdapter extends AbstractAdapter {
 	}
 
 	protected function convertCardToToken(array $parameters) : array {
-		$token_request = $this->gateway->createToken(['card'=>$parameters['card']]);
+		$params = ['card' => $parameters['card']];
+		$customerResponse = $this->gateway->createCustomer([
+			'email' => $parameters['card']->getEmail()
+		])->send();
+		$params['customer'] = $customerResponse->getData()['customer'];
+		$token_request = $this->gateway->createToken($params);
 		$result = $token_request->send();
 		$parameters['token'] = $result->getToken();
 		unset($parameters['card']);

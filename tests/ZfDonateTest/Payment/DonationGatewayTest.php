@@ -6,7 +6,7 @@ use ZfDonate\Payment\Adapter\AdapterInterface;
 use ZfDonate\Payment\PaymentResultEntity;
 use ZfDonate\Model\DonationEntity;
 
-class DonationGatewayTest extends \PHPUnit_Framework_TestCase {
+class DonationGatewayTest extends \PHPUnit\Framework\TestCase {
 
 	public function testSingle() {
 		$adapter = $this->getMockBuilder(AdapterInterface::class)->getMock();

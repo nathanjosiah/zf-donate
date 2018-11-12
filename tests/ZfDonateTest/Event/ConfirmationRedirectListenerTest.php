@@ -7,7 +7,7 @@ use ZfDonate\Event\ConfirmationRedirectListener;
 use ZfDonate\Event\DonationEvent;
 use ZfDonate\Model\DonationEntity;
 
-class ConfirmationRedirectListenerTest extends \PHPUnit_Framework_TestCase {
+class ConfirmationRedirectListenerTest extends \PHPUnit\Framework\TestCase {
 	public function testRedirectsWithCorrectInfo() {
 		$donation = new DonationEntity();
 		$donation->firstName = 'John';

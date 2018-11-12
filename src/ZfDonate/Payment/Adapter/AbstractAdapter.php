@@ -10,7 +10,6 @@ abstract class AbstractAdapter implements AdapterInterface {
 		$options = [
 			'currency' => 'USD',
 			'amount' => (float)$donation->amount,
-			'email' => $donation->email,
 		];
 
 		$base_data = [

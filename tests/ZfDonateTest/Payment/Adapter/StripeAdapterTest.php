@@ -9,15 +9,30 @@ use ZfDonate\Payment\Adapter\StripeAdapter;
 use ZfDonate\Payment\Gateway\Stripe\StripeGateway;
 use ZfDonate\Payment\PaymentResultEntity;
 
-class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
+class StripeAdapterTest extends \PHPUnit\Framework\TestCase {
 	public function testProcessSingle() {
 		$gateway = $this->getMockBuilder(StripeGateway::class)->disableOriginalConstructor()->getMock();
 		$request = $this->getMockBuilder(RequestInterface::class)->getMock();
 		$response = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
 		$token_request = $this->getMockBuilder(RequestInterface::class)->getMock();
-		$token_response = new Response($request,['object'=>'token','id'=>'my_generated_token']);
+		$token_response = new Response($request,json_encode(['object'=>'token','id'=>'my_generated_token']));
 		$token_request->expects($this->once())->method('send')->willReturn($token_response);
-		$gateway->expects($this->once())->method('createToken')->willReturn($token_request);
+		$gateway->expects($this->once())
+			->method('createToken')
+			->with($this->callback(function(array $args) {
+				$this->assertSame('abc123', $args['customer']);
+				$this->assertInstanceOf(CreditCard::class, $args['card']);
+
+				return true;
+			}))
+			->willReturn($token_request);
+
+		$customerRequest = $this->getMockBuilder(RequestInterface::class)->disableOriginalConstructor()->getMock();
+		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"customer":"abc123"}'));
+		$gateway->expects($this->once())
+			->method('createCustomer')
+			->with(['email' => 'foobar'])
+			->willReturn($customerRequest);
 
 		$adapter = new StripeAdapter();
 		$adapter->setGateway($gateway);
@@ -38,6 +53,7 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 
 		$donation = new DonationEntity();
 		$donation->amount = 12.34;
+		$donation->email = 'foobar';
 		$result = $adapter->processSingle($donation);
 		$this->assertInstanceOf(PaymentResultEntity::class,$result);
 		$this->assertSame($result->transactionId,'abc123');
@@ -48,9 +64,24 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->getMockBuilder(RequestInterface::class)->getMock();
 		$response = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
 		$token_request = $this->getMockBuilder(RequestInterface::class)->getMock();
-		$token_response = new Response($request,['object'=>'token','id'=>'my_generated_token']);
+		$token_response = new Response($request,json_encode(['object'=>'token','id'=>'my_generated_token']));
 		$token_request->expects($this->once())->method('send')->willReturn($token_response);
-		$gateway->expects($this->once())->method('createToken')->willReturn($token_request);
+		$gateway->expects($this->once())
+			->method('createToken')
+			->with($this->callback(function(array $args) {
+				$this->assertSame('abc123', $args['customer']);
+				$this->assertInstanceOf(CreditCard::class, $args['card']);
+
+				return true;
+			}))
+			->willReturn($token_request);
+
+		$customerRequest = $this->getMockBuilder(RequestInterface::class)->disableOriginalConstructor()->getMock();
+		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"customer":"abc123"}'));
+		$gateway->expects($this->once())
+			->method('createCustomer')
+			->with(['email' => 'foobar'])
+			->willReturn($customerRequest);
 
 		$adapter = new StripeAdapter();
 		$adapter->setGateway($gateway);
@@ -71,6 +102,7 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 
 		$donation = new DonationEntity();
 		$donation->amount = 12.34;
+		$donation->email = 'foobar';
 		$result = $adapter->processMonthly($donation);
 		$this->assertInstanceOf(PaymentResultEntity::class,$result);
 		$this->assertSame($result->transactionId,'abc123');
@@ -82,9 +114,24 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->getMockBuilder(RequestInterface::class)->getMock();
 		$response = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
 		$token_request = $this->getMockBuilder(RequestInterface::class)->getMock();
-		$token_response = new Response($request,['object'=>'token','id'=>'my_generated_token']);
+		$token_response = new Response($request,json_encode(['object'=>'token','id'=>'my_generated_token']));
 		$token_request->expects($this->once())->method('send')->willReturn($token_response);
-		$gateway->expects($this->once())->method('createToken')->willReturn($token_request);
+		$gateway->expects($this->once())
+			->method('createToken')
+			->with($this->callback(function(array $args) {
+				$this->assertSame('abc123', $args['customer']);
+				$this->assertInstanceOf(CreditCard::class, $args['card']);
+
+				return true;
+			}))
+			->willReturn($token_request);
+
+		$customerRequest = $this->getMockBuilder(RequestInterface::class)->disableOriginalConstructor()->getMock();
+		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"customer":"abc123"}'));
+		$gateway->expects($this->once())
+			->method('createCustomer')
+			->with(['email' => 'foobar'])
+			->willReturn($customerRequest);
 
 		$adapter = new StripeAdapter();
 		$adapter->setGateway($gateway);
@@ -95,6 +142,7 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$response->method('getMessage')->willReturn('ohnoe');
 
 		$donation = new DonationEntity();
+		$donation->email = 'foobar';
 		$result = $adapter->processSingle($donation);
 		$this->assertInstanceOf(PaymentResultEntity::class,$result);
 		$this->assertSame($result->errors,['ohnoe']);
@@ -105,9 +153,24 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$request = $this->getMockBuilder(RequestInterface::class)->getMock();
 		$response = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
 		$token_request = $this->getMockBuilder(RequestInterface::class)->getMock();
-		$token_response = new Response($request,['object'=>'token','id'=>'my_generated_token']);
+		$token_response = new Response($request,json_encode(['object'=>'token','id'=>'my_generated_token']));
 		$token_request->expects($this->once())->method('send')->willReturn($token_response);
-		$gateway->expects($this->once())->method('createToken')->willReturn($token_request);
+		$gateway->expects($this->once())
+			->method('createToken')
+			->with($this->callback(function(array $args) {
+				$this->assertSame('abc123', $args['customer']);
+				$this->assertInstanceOf(CreditCard::class, $args['card']);
+
+				return true;
+			}))
+			->willReturn($token_request);
+
+		$customerRequest = $this->getMockBuilder(RequestInterface::class)->disableOriginalConstructor()->getMock();
+		$customerRequest->expects($this->once())->method('send')->willReturn(new Response($request, '{"customer":"abc123"}'));
+		$gateway->expects($this->once())
+			->method('createCustomer')
+			->with(['email' => 'foobar'])
+			->willReturn($customerRequest);
 
 		$adapter = new StripeAdapter();
 		$adapter->setGateway($gateway);
@@ -118,6 +181,7 @@ class StripeAdapterTest extends \PHPUnit_Framework_TestCase {
 		$response->method('getMessage')->willReturn('ohnoe');
 
 		$donation = new DonationEntity();
+		$donation->email = 'foobar';
 		$result = $adapter->processMonthly($donation);
 		$this->assertInstanceOf(PaymentResultEntity::class,$result);
 		$this->assertSame($result->errors,['ohnoe']);

@@ -20,12 +20,11 @@ class PurchaseMonthlyRequest extends \Omnipay\Stripe\Message\AbstractRequest {
 		$this->parameters->set('plan_name',$plan);
 	}
 
-	public function getEmail() {
-		return $this->getParameter('email');
-	}
-
 	public function setEmail($email) {
 		$this->setParameter('email', $email);
 		return $this;
+	}
+	public function getEmail() {
+		return $this->getParameter('email');
 	}
 }

@@ -18,7 +18,7 @@ use ZfDonate\Payment\DonationGateway;
 use ZfDonate\Payment\PaymentFactory;
 use ZfDonateTest\Controller\TestAsset\ControllerStub;
 
-class DefaultControllerServiceFactoryTest extends \PHPUnit_Framework_TestCase {
+class DefaultControllerServiceFactoryTest extends \PHPUnit\Framework\TestCase {
 	public function testDependenciesAreCreatedProperly() {
 		$factory = new DefaultControllerServiceFactory();
 		$shared_event_manager = new SharedEventManager();
